@@ -1,19 +1,21 @@
+// TODO: При создании новой базы добавить к некоторым полям уникальное значение
+
 CREATE TABLE teachers (
    id INTEGER PRIMARY KEY AUTOINCREMENT,
    name TEXT NOT NULL,
    surname TEXT NOT NULL,
-   email TEXT NOT NULL
+   email TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE courses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE streams (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     course_id INTEGER NOT NULL, 
-    number_stream INTEGER NOT NULL,
+    number_stream INTEGER NOT NULL UNIQUE,
     date_start TEXT NOT NULL,
     number_student INTEGER NOT NULL,
     FOREIGN KEY (course_id) REFERENCES courses 
@@ -30,7 +32,7 @@ CREATE TABLE grades (
 
 
 1. В таблице streams переименуйте столбец даты начала обучения в started_at.
-ALTER TABLE streams RENAME COLUMN date_start TO started_at
+ALTER TABLE streams RENAME COLUMN date_start TO started_at;
 
 2. В таблице streams добавьте столбец даты завершения обучения finished_at.
 ALTER TABLE streams ADD COLUMN finished_at TEXT
@@ -58,21 +60,21 @@ VALUES
 
 
 
-INSERT INTO 'streams' (id, course_id, number, started_at, students_amount)
+INSERT INTO 'streams' (id, course_id, number_stream, started_at, number_student)
 VALUES
-    (1, 3, 165, '18.08.2020', 34),
+    (1, 3, 165, '18.08.2020', 34);
 
-INSERT INTO 'streams' (course_id, number, started_at, students_amount)
+INSERT INTO 'streams' (course_id, number_stream, started_at, number_student)
 VALUES
     (2, 178, '02.10.2020', 37),
     (1, 203, '12.11.2020', 35),
-    (1, 210, '03.12.2020, 41);
+    (1, 210, '03.12.2020', 41);
 
 
 
-INSERT INTO 'grades' (teacher_id, stream_id, performance)
+INSERT INTO 'grades' (teacher_id, stream_id, grade)
 VALUES
     (3, 1, 4.7),
     (2, 2, 4.9),
     (1, 3, 4.8),
-    (1, 4, 4.9)
+    (1, 4, 4.9);
