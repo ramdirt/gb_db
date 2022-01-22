@@ -1,0 +1,60 @@
+1. Найдите общее количество учеников для каждого курса.
+В отчёт выведите название курса и количество учеников по всем потокам курса.
+Решите задание с применением оконных функций.
+
+SELECT DISTINCT
+    courses.name,
+    SUM(streams.number_student) OVER(sum_student) AS 'student_count'
+FROM streams
+    INNER JOIN courses
+        ON courses.id = streams.course_id
+WINDOW sum_student AS (PARTITION BY courses.id)
+ORDER BY
+    student_count DESC;
+
+
+2. Найдите среднюю оценку по всем потокам для всех учителей.
+В отчёт выведите идентификатор, фамилию и имя учителя,
+среднюю оценку по всем проведённым потокам.
+Учителя, у которых не было потоков,
+также должны попасть в выборку.
+Решите задание с применением оконных функций.
+
+SELECT DISTINCT
+    teachers.id AS 'teacher_id',
+    teachers.surname,
+    teachers.name,
+    AVG(grades.grade) OVER(PARTITION BY teachers.id) AS 'AVG grade'
+FROM streams
+    LEFT JOIN grades
+        ON grades.stream_id = streams.id
+    LEFT JOIN teachers
+        ON teachers.id = grades.teacher_id
+ORDER BY
+    teachers.name DESC;
+
+3. Какие индексы надо создать для максимально быстрого выполнения представленного запроса?
+
+SELECT
+  surname,
+  name,
+  number,
+  performance
+FROM academic_performance
+  JOIN teachers 
+    ON academic_performance.teacher_id = teachers.id
+  JOIN streams
+    ON academic_performance.stream_id = streams.id
+WHERE number >= 200;
+
+Мне не на чего опиратся, думая о том на какую колонку создавать индексы, кроме
+как правила из методички что для ускорение работы БД
+на колонки по которым часто идет поиск или сортировка создаются индексы,
+в данном случае по представленному коду, я бы повесил индексы на 'number'
+
+
+4. Установите SQLiteStudio,
+подключите базу данных учителей,
+выполните в графическом клиенте любой запрос.
+
+Скрин в архиве.

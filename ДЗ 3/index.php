@@ -71,7 +71,6 @@ VALUES
     (1, 210, '03.12.2020', 41);
 
 
-
 INSERT INTO 'grades' (teacher_id, stream_id, grade)
 VALUES
     (3, 1, 4.7),

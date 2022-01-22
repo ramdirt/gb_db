@@ -1,0 +1,48 @@
+/*
+1. Найдите потоки, количество учеников в которых больше или равно 40.
+В отчет выведите номер потока, название курса и количество учеников.
+SELECT
+    number_stream,
+    (SELECT name FROM courses WHERE id = course_id) AS 'name_course',
+    number_student
+FROM
+    streams
+WHERE
+    number_student >= 40;
+
+2. Найдите два потока с самыми низкими значениями успеваемости.
+В отчет выведите номер потока, название курса, фамилию и имя преподавателя (одним столбцом), оценку успеваемости.
+SELECT
+    number_stream,
+    (SELECT name FROM courses WHERE courses.id = streams.course_id) AS 'name_course',
+    (SELECT surname || " " || name FROM teachers WHERE teachers.id =
+        (SELECT teacher_id FROM grades WHERE grades.stream_id = streams.id)) AS 'FIO',
+    (SELECT grade FROM grades WHERE grades.stream_id = streams.id) AS 'grade'
+FROM
+    streams
+WHERE
+    grade < (SELECT AVG(grade) FROM grades);
+
+
+3. Найдите среднюю успеваемость всех потоков преподавателя Николая Савельева.
+В отчёт выведите идентификатор преподавателя и среднюю оценку по потокам.
+SELECT
+    teacher_id,
+    AVG(grade) AS 'AVG grade'
+FROM
+    grades
+WHERE
+    teacher_id = (SELECT id FROM teachers WHERE name = "Николай" AND surname = "Савельев");
+
+4. Найдите потоки преподавателя Натальи Петровой, а также потоки, по которым успеваемость ниже 4.8.
+В отчёт выведите идентификатор потока, фамилию и имя преподавателя.
+SELECT
+    id,
+    (SELECT surname FROM teachers WHERE teachers.id =
+        (SELECT teacher_id FROM grades WHERE grades.stream_id = streams.id)) AS 'surname',
+    (SELECT name FROM teachers WHERE teachers.id =
+        (SELECT teacher_id FROM grades WHERE grades.stream_id = streams.id)) AS 'name'
+FROM
+    streams
+WHERE
+    surname = "Петрова" OR (SELECT AVG(grade) FROM grades) < 4.8;
